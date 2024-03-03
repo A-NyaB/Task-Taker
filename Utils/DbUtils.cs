@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.SqlClient;
-using System.Data;
 
 
 namespace Task_Taker.Utils
@@ -103,11 +102,16 @@ namespace Task_Taker.Utils
             return !IsDbNull(reader, column);
         }
 
-        public static bool GetBoolean(SqlDataReader reader, string column)
-        {
-            return reader.GetBoolean(Convert.ToString(column));
-        }
 
+        //added to get bool from dbutils
+        /// <summary>
+        /// Get a boolean from a data reader object and gracefully handle NULL values
+        /// </summary>
+        public static bool? GetBool(SqlDataReader reader, string column)
+        {
+            var ordinal = reader.GetOrdinal(column);
+            return reader.IsDBNull(ordinal) ? (bool?)null : reader.GetBoolean(ordinal);
+        }
         /// <summary>
         ///  Add a parameter to the given SqlCommand object and gracefully handle null values.
         /// </summary>
@@ -126,6 +130,9 @@ namespace Task_Taker.Utils
             }
         }
 
+        public static object ValueOrDBNull(object value)
+        {
+            return value ?? DBNull.Value;
+        }
     }
 }
-
