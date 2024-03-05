@@ -113,8 +113,7 @@ namespace Task_Taker.Repositories
                         OUTPUT INSERTED.ID
                         VALUES (
                             @TaskListId, @Title, @Description, @StatusId, @EstimatedTime, @ActualTime,
-                            @Completed )";
-                    //start here   
+                            @Completed )"; 
                     cmd.Parameters.AddWithValue("@TaskListId", task.TaskListId);
                     cmd.Parameters.AddWithValue("@Title", task.Title);
                     cmd.Parameters.AddWithValue("@Description", task.Description);
