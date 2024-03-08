@@ -17,7 +17,7 @@ namespace Task_Taker.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                       SELECT t.Id, t.TaskListId, t.Title, t.Description, t.StatusId, t.EstimatedTime, t.ActualTime
+                       SELECT t.Id, t.TaskListId, t.Title, t.Description, t.StatusId, t.EstimatedTime, t.ActualTime,
                         tl.UserId, t.Completed, tl.ListTitle, s.Progress
                         FROM Task t
                         LEFT JOIN TaskList tl ON t.TaskListId = tl.id
@@ -201,7 +201,7 @@ namespace Task_Taker.Repositories
                     Progress = reader.GetString(reader.GetOrdinal("Progress"))
                 },
                 EstimatedTime = reader.GetInt32(reader.GetOrdinal("EstimatedTime")),
-                ActualTime = reader.GetInt32(reader.GetOrdinal("ActualTime")),
+                ActualTime = DbUtils.GetNullableInt(reader, "ActualTime"),
                 Completed = reader.GetBoolean(reader.GetOrdinal("Completed")),
             };
         }
