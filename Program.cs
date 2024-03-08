@@ -15,6 +15,7 @@ namespace Task_Taker
             builder.Services.AddTransient<IUserRepository, UserRepository>();
             builder.Services.AddTransient<ITaskRepository, TaskRepository>();
             builder.Services.AddTransient<ITaskListRepository, TaskListRepository>();
+            builder.Services.AddTransient<IStatusRepository, StatusRepository>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

@@ -24,7 +24,7 @@ namespace Task_Taker.Controllers
                 return Ok(_taskRepository.GetAllTasks());
             }
 
-            [HttpGet("task/{taskId}")]
+        [HttpGet("{taskId}")]        
             public IActionResult GetTaskById(int taskId)
             {
                 var task = _taskRepository.GetTaskById(taskId);
@@ -35,11 +35,11 @@ namespace Task_Taker.Controllers
                 return Ok(task);
             }
 
-            [HttpGet("{userId}")]
-            public IActionResult GetTasksByUser(int userId)
+        [HttpGet("task/{taskListId}")]
+        public IActionResult GetTasksByUser(int taskListId)
             {
 
-                return Ok(_taskRepository.GetAllTasksByList(userId));
+                return Ok(_taskRepository.GetAllTasksByList(taskListId));
             }
 
             [HttpPost]

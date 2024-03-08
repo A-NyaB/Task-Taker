@@ -18,9 +18,12 @@ namespace Task_Taker.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT Id, UserId, ListTitle
-                        FROM TaskList
-                        ORDER BY ListTitle";
+                       SELECT t.Id, t.UserId, t.ListTitle, up.Id as thisUserId, 
+                        up.FirstName, up.LastName, up.DisplayName, 
+                        up.Email, up.CreateDateTime, up.ImageLocation
+                        FROM TaskList t
+                        JOIN UserProfile up on t.UserId = up.Id
+                        ORDER BY t.ListTitle";
                     var reader = cmd.ExecuteReader();
                     var taskList = new List<TaskList>();
                     while (reader.Read())
@@ -29,8 +32,21 @@ namespace Task_Taker.Repositories
                         {
                             Id = DbUtils.GetInt(reader, "Id"),
                             UserId = DbUtils.GetInt(reader, "UserId"),
-                            ListTitle = DbUtils.GetString(reader, "ListTitle")
-                        });
+                            ListTitle = DbUtils.GetString(reader, "ListTitle"),
+                            UserProfile = new UserProfile()
+                            {
+                                Id = DbUtils.GetInt(reader, "thisUserId"),
+                                FirstName = DbUtils.GetString(reader, "FirstName"),
+                                LastName = DbUtils.GetString(reader, "LastName"),
+                                DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                                Email = DbUtils.GetString(reader, "Email"),
+                                CreateDateTime = DbUtils.GetDateTime(reader, "CreateDateTime"),
+                                ImageLocation = DbUtils.GetString(reader, "ImageLocation")
+
+
+
+                            }
+                        }); ;
                     }
                     reader.Close();
                     return taskList;
@@ -65,8 +81,14 @@ namespace Task_Taker.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Id, UserId, ListTitle FROM TaskList " +
-                                      "WHERE Id = @Id";
+                    cmd.CommandText = @"
+                       SELECT t.Id, t.UserId, t.ListTitle, up.Id as thisUserId, 
+                        up.FirstName, up.LastName, up.DisplayName, 
+                        up.Email, up.CreateDateTime, up.ImageLocation
+                        FROM TaskList t
+                        JOIN UserProfile up on t.UserId = up.Id
+                        WHERE t.Id = @id
+                        ORDER BY t.ListTitle";
                     DbUtils.AddParameter(cmd, "@Id", id);
 
                     using (var reader = cmd.ExecuteReader())
@@ -78,6 +100,19 @@ namespace Task_Taker.Repositories
                         Id = reader.GetInt32(reader.GetOrdinal("Id")),
                         UserId = reader.GetInt32(reader.GetOrdinal("UserId")),
                         ListTitle = reader.GetString(reader.GetOrdinal("ListTitle")),
+                         UserProfile = new UserProfile()
+                            {
+                                Id = DbUtils.GetInt(reader, "thisUserId"),
+                                FirstName = DbUtils.GetString(reader, "FirstName"),
+                                LastName = DbUtils.GetString(reader, "LastName"),
+                                DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                                Email = DbUtils.GetString(reader, "Email"),
+                                CreateDateTime = DbUtils.GetDateTime(reader, "CreateDateTime"),
+                                ImageLocation = DbUtils.GetString(reader, "ImageLocation")
+
+
+
+                            }
                     }};
                         }
                         else
@@ -128,9 +163,14 @@ namespace Task_Taker.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-            SELECT Id, UserId, ListTitle FROM TaskList
-            WHERE Id = @id
-            ";
+                       SELECT t.Id, t.UserId, t.ListTitle, up.Id as thisUserId, 
+                        up.FirstName, up.LastName, up.DisplayName, 
+                        up.Email, up.CreateDateTime, up.ImageLocation
+                        FROM TaskList t
+                        JOIN UserProfile up on t.UserId = up.Id
+                        WHERE t.Id = @id                        
+                        ORDER BY t.ListTitle
+                       ";
                     cmd.Parameters.AddWithValue("@id", id);
                     SqlDataReader reader = cmd.ExecuteReader();
                     if (reader.Read())
@@ -140,6 +180,19 @@ namespace Task_Taker.Repositories
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             UserId = reader.GetInt32(reader.GetOrdinal("Id")),
                             ListTitle = reader.GetString(reader.GetOrdinal("ListTitle")),
+                            UserProfile = new UserProfile()
+                            {
+                                Id = DbUtils.GetInt(reader, "thisUserId"),
+                                FirstName = DbUtils.GetString(reader, "FirstName"),
+                                LastName = DbUtils.GetString(reader, "LastName"),
+                                DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                                Email = DbUtils.GetString(reader, "Email"),
+                                CreateDateTime = DbUtils.GetDateTime(reader, "CreateDateTime"),
+                                ImageLocation = DbUtils.GetString(reader, "ImageLocation")
+
+
+
+                            }
                         };
                         reader.Close();
                         return taskList;
